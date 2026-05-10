@@ -32,7 +32,9 @@
             "pages": [
               "index",
               "showcase",
-              "features"
+              "features",
+              "architecture",
+              "architecture-zh"
             ]
           },
           {
