@@ -1,0 +1,69 @@
+● OpenSRE 与 OpenCode 的集成方式
+
+  集成定位
+
+  OpenCode 是 OpenSRE 的 CLI-backed LLM provider 之一，和 Codex、Kimi、Claude Code
+  等并列。它不是特例，而是走了一套统一的 llm_cli 适配框架。
+
+  核心文件：
+  - app/integrations/llm_cli/opencode.py — OpenCode 专用适配器
+  - app/integrations/llm_cli/registry.py — 注册为 "opencode" provider
+  - app/integrations/llm_cli/runner.py — 统一子进程执行引擎
+  - app/services/llm_client.py — _create_llm_client() 从 registry 自动选择 CLI 路径
+
+  数据流向
+
+  OpenSRE 节点 (Node)
+    │  invoke(messages)
+    ▼
+  CLIBackedLLMClient
+    │  flatten_messages_to_prompt()   ← 消息列表 → 纯文本
+    │  guardrails 引擎                 ← 脱敏/拦截
+    │  probe.detect()                  ← 检查安装 + 登录
+    ▼
+  OpenCodeAdapter.build(prompt, model, workspace)
+    │  返回 CLIInvocation:
+    │    argv  = ["opencode", "run", "-m", <model>]
+    │    stdin = prompt
+    │    env   = {NO_COLOR, ANTHROPIC_API_KEY, ...}
+    ▼
+  build_cli_subprocess_env(env)        ← 过滤安全环境变量
+    │  只放行 PATH, HOME, HTTP_PROXY, OPENCODE_*, API_KEY 等
+    ▼
+  subprocess.run(argv, input=stdin, env=merged_env)
+    │  ──────────────────────────────►  opencode run
+    │  ◄──────────────────────────────  stdout
+    ▼
+  OpenCodeAdapter.parse(stdout)        ← 提取最终回答
+    │
+    ▼
+  LLMResponse(content)
+
+  关键设计细节
+
+  1. 探测流程 (detect()):
+  resolve_binary()  →  OPENCODE_BIN → PATH → 常见安装目录
+  probe_binary()    →
+    1. opencode --version           (检查是否安装)
+    2. opencode auth list           (检查登录状态)
+       → 解析输出中 "N credentials" + "M environment variables"
+       → 任一 ≥ 1 则 logged_in=True
+
+  2. 认证支持两种模式：
+  - auth.json 文件凭证（opencode auth login）
+  - 环境变量 API Key（ANTHROPIC_API_KEY、OPENAI_API_KEY 等）
+
+  3. 环境变量安全：
+  - 前缀 OPENCODE_* 在 subprocess_env.py 白名单中
+  - HTTP 供应商 Key（ANTHROPIC_API_KEY 等）通过 env_overrides.py 显式合并
+  - 代理设置（HTTP_PROXY、HTTPS_PROXY）直接继承
+
+  4. 配置入口：
+  - LLM_PROVIDER=opencode 时，_create_llm_client() 自动构造 CLIBackedLLMClient(OpenCodeAdapter())
+  - 可选环境变量 OPENCODE_MODEL 指定模型
+  - 可选 OPENCODE_BIN 指定二进制路径
+
+  一句话总结
+
+  OpenSRE 把 OpenCode CLI 包装成一次非交互式 opencode run 子进程调用：通过 stdin 发送 prompt，从 stdout 接收回答，统一走
+   detect → build → run → parse 的标准适配器生命周期，和调用 HTTP API 的 provider 在接口层面保持一致。

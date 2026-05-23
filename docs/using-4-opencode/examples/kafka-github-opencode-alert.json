@@ -1,0 +1,22 @@
+{
+  "alert_name": "Kafka consumer lag spike for target service",
+  "pipeline_name": "ollama_03_02_claude_prompt02_template",
+  "severity": "warning",
+  "alert_source": "kafka",
+  "message": "Investigate recent Kafka consumer group lag or topic health issues and correlate with the target GitHub repository.",
+  "service_name": "ollama-03-02-claude-prompt02-template",
+  "repo_url": "https://github.com/woyao-cloud/ollama-03-02-claude-prompt02-template.git",
+  "github_owner": "woyao-cloud",
+  "github_repo": "ollama-03-02-claude-prompt02-template",
+  "branch": "main",
+  "error_message": "Consumer group lag detected on target topic.",
+  "commonAnnotations": {
+    "summary": "Kafka consumer group lag is increasing for the target service. Investigate topic health and correlate with recent code changes.",
+    "repo_url": "https://github.com/woyao-cloud/ollama-03-02-claude-prompt02-template.git",
+    "kafka_topic": "application-errors",
+    "kafka_group_id": "error-processor-group",
+    "github_query": "kafka OR consumer OR error-handler OR failed OR exception",
+    "branch": "main",
+    "correlation_id": "replace-me"
+  }
+}

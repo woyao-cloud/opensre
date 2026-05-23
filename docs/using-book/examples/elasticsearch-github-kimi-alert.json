@@ -1,0 +1,22 @@
+{
+  "alert_name": "Elasticsearch error spike for target service",
+  "pipeline_name": "ollama_03_02_claude_prompt02_template",
+  "severity": "critical",
+  "alert_source": "elasticsearch",
+  "message": "Investigate recent application failures using Elasticsearch logs and correlate them with the target GitHub repository.",
+  "service_name": "ollama-03-02-claude-prompt02-template",
+  "repo_url": "https://github.com/woyao-cloud/ollama-03-02-claude-prompt02-template.git",
+  "github_owner": "woyao-cloud",
+  "github_repo": "ollama-03-02-claude-prompt02-template",
+  "branch": "main",
+  "error_message": "error OR exception OR failed",
+  "commonAnnotations": {
+    "summary": "Recent production logs show repeated application errors. Investigate logs first, then correlate with recent code changes.",
+    "repo_url": "https://github.com/woyao-cloud/ollama-03-02-claude-prompt02-template.git",
+    "elasticsearch_query": "error OR exception OR failed",
+    "opensearch_index_pattern": "logs-*",
+    "github_query": "error OR exception OR traceback OR failed",
+    "branch": "main",
+    "correlation_id": "replace-me"
+  }
+}

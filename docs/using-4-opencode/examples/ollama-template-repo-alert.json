@@ -1,0 +1,22 @@
+{
+  "alert_name": "Potential prompt or template regression in target repository",
+  "pipeline_name": "ollama_03_02_claude_prompt02_template",
+  "severity": "critical",
+  "alert_source": "elasticsearch",
+  "message": "Investigate whether a recent template, prompt, Modelfile, or parameter change in the target repository correlates with recent production failures.",
+  "service_name": "ollama-03-02-claude-prompt02-template",
+  "repo_url": "https://github.com/woyao-cloud/ollama-03-02-claude-prompt02-template.git",
+  "github_owner": "woyao-cloud",
+  "github_repo": "ollama-03-02-claude-prompt02-template",
+  "branch": "main",
+  "error_message": "error OR exception OR failed",
+  "commonAnnotations": {
+    "summary": "Recent failures may correlate with a prompt, template, or Modelfile change in the target repository.",
+    "repo_url": "https://github.com/woyao-cloud/ollama-03-02-claude-prompt02-template.git",
+    "elasticsearch_query": "error OR exception OR failed",
+    "opensearch_index_pattern": "logs-*",
+    "github_query": "Modelfile OR prompt OR template OR system OR parameter OR claude OR ollama",
+    "branch": "main",
+    "correlation_id": "replace-me"
+  }
+}

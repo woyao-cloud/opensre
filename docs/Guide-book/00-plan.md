@@ -117,6 +117,17 @@
 - analytics / tracing
 - 新增 integration / tool / node / service 的路径
 
+### `09-cli-llm-adapters.md`
+
+补一章专门讲“OpenSRE 如何调用外部 CLI LLM”：
+
+- `llm_cli` 抽象合同
+- provider registry
+- `CLIBackedLLMClient` 的执行流程
+- stdin / stdout 交互机制
+- `kimi` 适配器的实现方式
+- 结构化输出与限制
+
 ## 输出形式
 
 输出保存到 `docs/Guide-book/` 目录下，使用 Markdown 多文件结构，方便：

@@ -25,6 +25,7 @@
 7. [06-services.md](./06-services.md)
 8. [07-cli-remote-and-deployment.md](./07-cli-remote-and-deployment.md)
 9. [08-cross-cutting-and-extension.md](./08-cross-cutting-and-extension.md)
+10. [09-cli-llm-adapters.md](./09-cli-llm-adapters.md)
 
 ## 一页结论
 
@@ -75,3 +76,4 @@ OpenSRE 是一个面向生产事故调查与根因分析的 AI SRE Agent 框架�
 - 想看供应商 API 与 LLM 是怎么包的：读 `06`
 - 想理解 CLI、MCP、远端部署入口：读 `07`
 - 想二次开发：读 `08`
+- 想看 OpenSRE 如何调用 `codex`、`kimi` 这类外部 CLI LLM：读 `09`
